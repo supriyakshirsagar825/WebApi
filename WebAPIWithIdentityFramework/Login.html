@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+   
+</head>
+<body>
+
+    <div class="container">
+        <label class="col-md-6">Email address/Username:</label>
+        <input class="form-control col-md-6" placeholder="Enter email" id="email">
+        <label class="col-md-6">Password:</label>
+        <input type="password" class="form-control col-md-6" placeholder="Enter password" id="pwd">
+        <br />
+        <input type="button" id="btnlogin" class="btn btn-primary " value="Login" />
+    </div>
+    <!-- Button trigger modal -->
+   <div id="errordiv">
+
+   </div>
+    <!-- Modal -->
+    
+    <script src="Scripts/jquery-3.4.1.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnlogin').click(function () {
+                $.ajax({
+                    url: '/token',
+                    method: 'POST',
+                    contentType:'application/json',
+                    data: {
+                        email: $('#email').val(),
+                        password: $('#pwd').val(),
+                        grant_type: 'password'
+                    },
+                    success: function (response) {
+                        sessionStorage.setItem('accessToken', response.access_token);
+                        console.log("done");
+                        $('#errordiv').text(JSON.stringify(response));
+                        window.location.href = "data.html";
+                    },
+                    error: function (jqXHR) {
+                        console.log("error " + jqXHR.status);
+                        console.log("error " + jqXHR.statusText + "" + jqXHR.statusCode());
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>

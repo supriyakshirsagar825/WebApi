@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+   
+</head>
+<body>
+
+    <div class="container">
+        <label class="col-md-6">Email address:</label>
+        <input class="form-control col-md-6" placeholder="Enter email" id="email">
+        <label class="col-md-6">Password:</label>
+        <input type="password" class="form-control col-md-6" placeholder="Enter password" id="pwd">
+        <label class="col-md-6">Password:</label>
+        <input type="password" class="form-control col-md-6" placeholder="Enter Confirm password" id="pwdc">
+        <br />
+        <input type="button" id="btnregister" class="btn btn-primary " value="Register" />
+    </div>
+    <!-- Button trigger modal -->
+   
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Registration Successful....
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="Scripts/jquery-3.4.1.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnregister').click(function () {
+                $.ajax({
+                    url: '/api/account/register',
+                    method: 'POST',
+                    data: {
+                        email: $('#email').val(),
+                        password: $('#pwd').val(),
+                        confirmPassword: $('#pwdc').val()
+                    },
+                    success: function () {
+                        console.log("done");
+                        $('#exampleModal').modal('show');
+
+                    },
+                    error: function (jqXHR) {
+                        console.log("error " + jqXHR.status);
+                        console.log("error " + jqXHR.statusText + "" + jqXHR.statusCode());
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
