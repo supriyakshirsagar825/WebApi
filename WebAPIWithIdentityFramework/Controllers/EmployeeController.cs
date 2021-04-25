@@ -11,12 +11,12 @@ namespace WebAPIWithIdentityFramework.Controllers
     public class EmployeeController : ApiController
     {
         [HttpGet]
-        public HttpResponseMessage Get()
+        public IEnumerable<DBEmployee> Get()
         {
            using(WEBAPIDATABASEEntities db=new WEBAPIDATABASEEntities())
             {
-                 var list=  db.DBEmployees.ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, list);
+                 return db.DBEmployees.ToList();
+                //return Request.CreateResponse(HttpStatusCode.OK, list.ToList());
             }
             
         }

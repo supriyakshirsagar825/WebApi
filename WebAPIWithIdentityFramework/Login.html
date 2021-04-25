@@ -7,12 +7,15 @@
    
 </head>
 <body>
-
+    
     <div class="container">
+        <div>
+            <a href="Registration.html" class="btn btn-success">Registration</a>
+        </div>
         <label class="col-md-6">Email address/Username:</label>
-        <input class="form-control col-md-6" placeholder="Enter email" id="email">
+        <input class="form-control col-md-6" placeholder="Enter email" value="admin@gmail.com" id="username" />
         <label class="col-md-6">Password:</label>
-        <input type="password" class="form-control col-md-6" placeholder="Enter password" id="pwd">
+        <input type="password" class="form-control col-md-6" placeholder="Enter password" value="Admin@1234#" id="pwd" />
         <br />
         <input type="button" id="btnlogin" class="btn btn-primary " value="Login" />
     </div>
@@ -31,11 +34,11 @@
                 $.ajax({
                     url: '/token',
                     method: 'POST',
-                    contentType:'application/json',
+                    contentType: 'application/json',
                     data: {
-                        email: $('#email').val(),
-                        password: $('#pwd').val(),
-                        grant_type: 'password'
+                        grant_type: 'password',
+                        UserName: $('#username').val(),
+                        Password: $('#pwd').val()
                     },
                     success: function (response) {
                         sessionStorage.setItem('accessToken', response.access_token);

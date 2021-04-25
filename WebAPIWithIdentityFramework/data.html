@@ -3,8 +3,95 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+
 </head>
 <body>
-    data page
+
+    <div class="well">
+        <input type="button" id="btnLoadEmployees" class="btn btn-primary " value="Load Employees" />
+        <input type="button" id="btnLogOff" class="btn btn-primary pull-right" value="Log Off" />
+    </div>
+    <div class="well hidden" id="divData">
+        <table class="table table-bordered" id="tblData">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Gender</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+            <tbody id="tblBody">
+            
+            </tbody>
+        </table>
+    </div>
+    <!-- Button trigger modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Session Expeired..</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-capitalize">
+                    <h1> Please close this to login again...</h1>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="Scripts/jquery-3.4.1.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if (sessionStorage.getItem('accessToken') == null) {
+                window.location.href = "Login.html";
+            }
+            $('#btnLogOff').click(function () {
+                sessionStorage.removeItem('accessToken');
+                window.location.href = "Login.html";
+            });
+            $('#errorModal').on('hidden.bs.modal', function () {
+                window.location.href = "Login.html";
+            });
+            $('#btnLoadEmployees').click(function () {
+                $('#tblBody').empty();
+                $.ajax({
+                    url: '/api/employee',
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken')
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        $('#divData').removeClass('hidden');
+                        $.each(data, function (index, value) {
+                            $('#tblData').append('<tr> <td>' + value.Id + '</td> <td>' + value.FirstName + '</td> <td>' + value.LastName + '</td> <td>' + value.Gender + '</td> <td>' + value.Salary + '</td> </tr>');
+                        });
+                    },
+                    error: function (jqXHR) {
+                        if (jqXHR.status == "401") {
+                            $('#errorModal').modal('show');
+                        }
+                        else {
+                            console.log("error " + jqXHR.status);
+                            console.log("error " + jqXHR.statusText + "" + jqXHR.statusCode());
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
 </body>
 </html>
