@@ -41,7 +41,8 @@
                         Password: $('#pwd').val()
                     },
                     success: function (response) {
-                        sessionStorage.setItem('accessToken', response.access_token);
+                        localStorage.setItem('accessToken', response.access_token);
+                        localStorage.setItem('userName', response.userName);
                         console.log("done");
                         $('#errordiv').text(JSON.stringify(response));
                         window.location.href = "data.html";

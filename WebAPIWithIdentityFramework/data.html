@@ -10,6 +10,7 @@
 
     <div class="well">
         <input type="button" id="btnLoadEmployees" class="btn btn-primary " value="Load Employees" />
+        <span id="spanUserName" class="text-muted"></span>
         <input type="button" id="btnLogOff" class="btn btn-primary pull-right" value="Log Off" />
     </div>
     <div class="well hidden" id="divData">
@@ -54,11 +55,12 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            if (sessionStorage.getItem('accessToken') == null) {
+            $('#spanUserName').text('Hello- ' + localStorage.getItem('userName'));
+            if (localStorage.getItem('accessToken') == null) {
                 window.location.href = "Login.html";
             }
             $('#btnLogOff').click(function () {
-                sessionStorage.removeItem('accessToken');
+                localStorage.removeItem('accessToken');
                 window.location.href = "Login.html";
             });
             $('#errorModal').on('hidden.bs.modal', function () {
@@ -70,7 +72,7 @@
                     url: '/api/employee',
                     method: 'GET',
                     headers: {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken')
+                        'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
                     },
                     contentType: 'application/json; charset=utf-8',
                     success: function (data) {
