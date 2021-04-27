@@ -14,34 +14,48 @@ namespace WebAPIWithIdentityFramework.Controllers
     {
         [HttpGet]
         [Route("")]
-        public HttpResponseMessage /*IEnumerable<DBEmployee>*/ Get()
+        public IHttpActionResult /*IEnumerable<DBEmployee>*/ Get()
         {
             using (WEBAPIDATABASEEntities db = new WEBAPIDATABASEEntities())
             {
                 // return db.DBEmployees.ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, db.DBEmployees.ToList());
+                return Ok(db.DBEmployees.ToList()); //Request.CreateResponse(HttpStatusCode.OK, db.DBEmployees.ToList());
             }
 
         }
+        [HttpPost]
+        [Route("")]
+        public IHttpActionResult Post(DBEmployee employee)
+        {
+            using (WEBAPIDATABASEEntities db = new WEBAPIDATABASEEntities())
+            {
+                db.DBEmployees.Add(employee);
+                db.SaveChanges();
+            }
+
+            return Created(new Uri(Url.Link("GetEmployeeByID", new { Id = employee.Id })),employee);//Request.CreateResponse(HttpStatusCode.Created, employee.Id);
+           // response.Headers.Location = new Uri(Url.Link("GetEmployeeByID",new { Id = employee.Id })); //new Uri(Request.RequestUri + "" + employee.Id.ToString());
+          //  return response;
+        }
         [HttpGet]
-        [Route("{id:int:min(1):max(1000)}")]
-        public HttpResponseMessage Get(int Id)
+        [Route("{id:int:min(1):max(10000)}",Name ="GetEmployeeByID")]
+        public IHttpActionResult Get(int Id)
         {
             using (WEBAPIDATABASEEntities db = new WEBAPIDATABASEEntities())
             {
                 // return db.DBEmployees.ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, db.DBEmployees.FirstOrDefault(x=>x.Id==Id));
+                return Ok(db.DBEmployees.FirstOrDefault(x => x.Id == Id)); //Request.CreateResponse(HttpStatusCode.OK, db.DBEmployees.FirstOrDefault(x=>x.Id==Id));
             }
 
         }
         [HttpGet]
         [Route("{name:alpha}")]
-        public HttpResponseMessage Get(string name)
+        public IHttpActionResult Get(string name)
         {
             using (WEBAPIDATABASEEntities db = new WEBAPIDATABASEEntities())
             {
                 // return db.DBEmployees.ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, db.DBEmployees.FirstOrDefault(x => x.FirstName == name));
+                return Ok(db.DBEmployees.FirstOrDefault(x => x.FirstName == name)); //Request.CreateResponse(HttpStatusCode.OK, db.DBEmployees.FirstOrDefault(x => x.FirstName == name));
             }
 
         }
